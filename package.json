@@ -1,0 +1,23 @@
+{
+  "name": "tdd",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "coverage": "jest --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lannh/csc307_TDD.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lannh/csc307_TDD/issues"
+  },
+  "homepage": "https://github.com/lannh/csc307_TDD#readme",
+  "dependencies": {
+    "jest": "^27.5.1"
+  }
+}
