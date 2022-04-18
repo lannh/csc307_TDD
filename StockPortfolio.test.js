@@ -4,9 +4,20 @@ const StockPortfolio = require("./StockPortfolio.js");
 const testPortfolio = new StockPortfolio();
 
 const defaultPortfolio = [
+    {stockSymbol: "ZERO",numOfShares: 0},
     {stockSymbol: "GME",numOfShares: 5},
-    {stockSymbol: "RBLX",numOfShares: 10}
+    {stockSymbol: "RBLX",numOfShares: 10},
+    {stockSymbol: "NEG2",numOfShares: -199},
+    {stockSymbol: "SPY",numOfShares: 68},
+    {stockSymbol: "VB",numOfShares: 23},
+    {stockSymbol: "ARKF",numOfShares: 45},
+    {stockSymbol: "ASDF",numOfShares: 20},
+    {stockSymbol: "NEG1",numOfShares: -20}
 ]; 
+
+beforeEach(() => {
+    createTestPortfolioWithItems(defaultPortfolio);
+});
 
 function createTestPortfolioWithItems()
 {
@@ -15,13 +26,13 @@ function createTestPortfolioWithItems()
 }
 
 test('checking if empty', () => {
-    expect(testPortfolio.portfolio.length).toBe(0);
+    const emptyPortfolio = new StockPortfolio();
+    expect(emptyPortfolio.portfolio.length).toBe(0);
 });
 
 test('count num of unique tickers', () =>{
-    createTestPortfolioWithItems(defaultPortfolio);
 
-    const targetCnt = 2;
+    const targetCnt = 6;
 
     let cntUniqueTickers =   
         testPortfolio.countUniqueTickers();
@@ -30,7 +41,8 @@ test('count num of unique tickers', () =>{
 });
 
 test('purchase a new stock symbol', () => {
-    const newStock = { stockSymbol: "ASDF", numOfShares: 3};
+
+    const newStock = { stockSymbol: "ZER", numOfShares: 3};
     
     testPortfolio.purchase(newStock);
 
@@ -38,11 +50,6 @@ test('purchase a new stock symbol', () => {
 });
 
 test('add shares to a symbol', () => {
-    createTestPortfolioWithItems([
-        {stockSymbol: "SPY",numOfShares: 68},
-        {stockSymbol: "VB",numOfShares: 23},
-        {stockSymbol: "ARKF",numOfShares: 45}
-    ]);
 
     const targetStock = {stockSymbol: "VB",numOfShares: 20};
     const targetNumOfShares = 43;
@@ -54,11 +61,6 @@ test('add shares to a symbol', () => {
 });
 
 test('sell # of shares of a stock - successful', () => {
-    createTestPortfolioWithItems([
-        {stockSymbol: "GME",numOfShares: 5},
-        {stockSymbol: "RBLX",numOfShares: 10},
-        {stockSymbol: "ASDF",numOfShares: 20}
-    ]);
 
     const targetNumOfShares = 17;
     const stockToBeSold = { stockSymbol: "ASDF", numOfShares: 3};
@@ -69,7 +71,6 @@ test('sell # of shares of a stock - successful', () => {
 });
 
 test('getNumOfShares - successful', () => {
-    createTestPortfolioWithItems(defaultPortfolio);
 
     const targetStock = { stockSymbol: "RBLX", numOfShares: 10};
     
@@ -79,28 +80,29 @@ test('getNumOfShares - successful', () => {
 });
 
 test('getNumOfShares of a non existing stockSymbol', () =>{
-    createTestPortfolioWithItems(defaultPortfolio);
-    const stockSymbol = "SPY";
+
+    const stockSymbol = "JKL";
 
     expect(() => testPortfolio.getNumOfShares(stockSymbol))
         .toThrow(/Cannot find stock symbol/);
 })
 
 test('stock has num of shares <=0', () => {
-    createTestPortfolioWithItems([
-         {stockSymbol: "GME",numOfShares: -1},
-         {stockSymbol: "RBLX",numOfShares: 10},
-         {stockSymbol: "ASDF",numOfShares: 0}
-    ]);
+
     const targetPorfolio = [
-        {stockSymbol: "RBLX",numOfShares: 10}
+        {stockSymbol: "GME",numOfShares: 5},
+        {stockSymbol: "RBLX",numOfShares: 10},
+        {stockSymbol: "SPY",numOfShares: 68},
+        {stockSymbol: "VB",numOfShares: 23},
+        {stockSymbol: "ARKF",numOfShares: 45},
+        {stockSymbol: "ASDF",numOfShares: 20}
     ];
  
     expect(testPortfolio.portfolio).toEqual(targetPorfolio);
 });
 
 test('sell more than currently owned shares', ()=>{
-    createTestPortfolioWithItems(defaultPortfolio);
+
     const stockToBeSold = {stockSymbol: "GME", numOfShares: 30};
 
     expect(() => testPortfolio.sell(stockToBeSold))
@@ -108,19 +110,23 @@ test('sell more than currently owned shares', ()=>{
 });
 
 test('sell a stock that is not owned', () => {
-    createTestPortfolioWithItems(defaultPortfolio);
+
     const stockToBeSold = {stockSymbol: "ADSF", numOfShares: 30};
 
     expect(() => testPortfolio.sell(stockToBeSold))
-    .toThrow(/ShareSaleException/);
+        .toThrow(/ShareSaleException/);
 });
 
 test('sell all shares of a stock', () => {
-    createTestPortfolioWithItems(defaultPortfolio);
+    
     const stockToBeSold = { stockSymbol: "RBLX", numOfShares: 10};
 
     const targetPorfolio = [
-        {stockSymbol: "GME",numOfShares: 5}
+        {stockSymbol: "GME",numOfShares: 5},
+        {stockSymbol: "SPY",numOfShares: 68},
+        {stockSymbol: "VB",numOfShares: 23},
+        {stockSymbol: "ARKF",numOfShares: 45},
+        {stockSymbol: "ASDF",numOfShares: 20}
     ];
  
     testPortfolio.sell(stockToBeSold);
